@@ -370,7 +370,8 @@ When non-nil SYNC, send notification synchronously."
 
 (cl-defun acp-make-initialize-request (&key protocol-version
                                             read-text-file-capability
-                                            write-text-file-capability)
+                                            write-text-file-capability
+                                            embedded-context-capability)
   "Instantiate an \"initialize\" request.
 
 PROTOCOL-VERSION is the version of the ACP protocol to use.
@@ -378,6 +379,8 @@ READ-TEXT-FILE-CAPABILITY is a boolean indicating if the client
 can read text files.
 WRITE-TEXT-FILE-CAPABILITY is a boolean indicating if the client
 can write text files.
+EMBEDDED-CONTEXT-CAPABILITY is a boolean indicating if the client
+supports embedding resource content directly in prompts.
 
 See https://agentclientprotocol.com/protocol/schema#initializerequest
 and https://agentclientprotocol.com/protocol/schema#initializeresponse."
@@ -390,7 +393,10 @@ and https://agentclientprotocol.com/protocol/schema#initializeresponse."
                                                                  :false))
                                               (writeTextFile . ,(if write-text-file-capability
                                                                     t
-                                                                  :false))))))))))
+                                                                  :false))))
+                                       (prompt . ((embeddedContext . ,(if embedded-context-capability
+                                                                          t
+                                                                        :false))))))))))
 
 (cl-defun acp-make-authenticate-request (&key method-id)
   "Instantiate an \"authenticate\" request.
